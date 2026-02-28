@@ -139,10 +139,15 @@ const createPicture = () => {
   };
 };
 
-const getPictures = () => {
-  return Array.from({ length: PICTURE_COUNT }, createPicture);
+const pictures = Array.from({ length: PICTURE_COUNT }, createPicture);
+
+// Методы для взаимодействия со списком изображений
+const getPictures = () => structuredClone(pictures);
+const getPicture = (id) => {
+  return pictures.find((item) => item.id === Number(id));
 };
 
 export {
-  getPictures
+  getPictures,
+  getPicture
 };

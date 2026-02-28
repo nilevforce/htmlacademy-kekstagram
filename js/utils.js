@@ -17,8 +17,11 @@ const createIdGenerator = () => {
   return () => ++currentId;
 };
 
+const isEscape = (evt) => evt.key === 'Escape';
+
 export {
   getRandomArrayElement,
   createIdGenerator,
-  getRandomInt
+  getRandomInt,
+  isEscape
 };
