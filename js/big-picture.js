@@ -26,9 +26,8 @@ const closeBigPicture = () => {
   document.body.classList.remove('modal-open');
   rootElement.classList.add('hidden');
 
-  /* eslint-disable no-use-before-define */
+  /* eslint-disable-next-line no-use-before-define */
   document.removeEventListener('keydown', onKeydownEvent);
-  /* eslint-enable no-use-before-define */
 };
 
 // Обрабатываем клик на закрытие модального окна
@@ -45,9 +44,8 @@ const onKeydownEvent = (evt) => {
 
 // Обрабатываем клик на кнопку "Загрузить еще"
 const onLoadMoreButtonClick = () => {
-  /* eslint-disable no-use-before-define */
+  /* eslint-disable-next-line no-use-before-define */
   loadMoreComments();
-  /* eslint-enable no-use-before-define */
 };
 
 // Создаем элемент с комментарием
