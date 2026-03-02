@@ -1,11 +1,315 @@
 import { isEscape } from './utils';
 
+const SCALE_DEFAULT = 1;
+const SCALE_MIN = 0.25;
+const SCALE_MAX = 1;
+const SCALE_STEP = 0.25;
+
+const FILTER_CHROME_DEFAULT = 1;
+const FILTER_CHROME_MIN = 0;
+const FILTER_CHROME_MAX = 1;
+const FILTER_CHROME_STEP = 0.1;
+
+const FILTER_SEPIA_DEFAULT = 1;
+const FILTER_SEPIA_MIN = 0;
+const FILTER_SEPIA_MAX = 1;
+const FILTER_SEPIA_STEP = 0.1;
+
+const FILTER_MARVIN_DEFAULT = 100;
+const FILTER_MARVIN_MIN = 0;
+const FILTER_MARVIN_MAX = 100;
+const FILTER_MARVIN_STEP = 1;
+
+const FILTER_PHOBOS_DEFAULT = 3;
+const FILTER_PHOBOS_MIN = 0;
+const FILTER_PHOBOS_MAX = 3;
+const FILTER_PHOBOS_STEP = 0.1;
+
+const FILTER_HEAT_DEFAULT = 3;
+const FILTER_HEAT_MIN = 1;
+const FILTER_HEAT_MAX = 3;
+const FILTER_HEAT_STEP = 0.1;
+
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadCloseButton = uploadForm.querySelector('.img-upload__cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+
+const previewImage = uploadForm.querySelector('.img-upload__preview img');
+const scaleControls = uploadForm.querySelector('.img-upload__scale');
+const scaleUpButton = scaleControls.querySelector('.scale__control--smaller');
+const scaleDownButton = scaleControls.querySelector('.scale__control--bigger');
+const scaleValue = scaleControls.querySelector('.scale__control--value');
+
+// Управление фильтрами
+const sliderContainer = uploadForm.querySelector('.img-upload__effect-level');
+const slider = uploadForm.querySelector('.effect-level__slider');
+const filterInputs = uploadForm.getElementsByClassName('effects__radio'); // Живая коллекция
+const filterInputValue = uploadForm.querySelector('.effect-level__value');
+
+const hideSlider = () => {
+  sliderContainer.classList.add('hidden');
+  slider.classList.add('hidden');
+};
+
+const showSlider = () => {
+  sliderContainer.classList.remove('hidden');
+  slider.classList.remove('hidden');
+};
+
+const getActiveFilter = () => {
+  const inputsList = Array.from(filterInputs);
+  const activeInput = inputsList.find((input) => input.checked);
+
+  return activeInput.value;
+};
+
+// uploadOverlay.classList.remove('hidden');
+
+const setFilterInputValue = (newValue) => {
+  filterInputValue.value = newValue;
+};
+
+// Управление фильтром ORIGINAL
+const applyOriginalFilter = () => {
+  previewImage.style.filter = '';
+};
+
+const setOriginalFilter = () => {
+  applyOriginalFilter();
+  setFilterInputValue();
+  hideSlider();
+};
+
+// Управление фильтром CHROME
+const applyChromeFilter = (newValue) => {
+  previewImage.style.filter = `grayscale(${newValue})`;
+};
+
+const setChromeFilter = () => {
+  applyChromeFilter(FILTER_CHROME_DEFAULT);
+  setFilterInputValue(FILTER_CHROME_DEFAULT);
+
+  const sliderOptions = {
+    start: FILTER_CHROME_DEFAULT,
+    range: {
+      min: FILTER_CHROME_MIN,
+      max: FILTER_CHROME_MAX
+    },
+    step: FILTER_CHROME_STEP
+  };
+
+  slider.noUiSlider.updateOptions(sliderOptions);
+
+  showSlider();
+};
+
+const updateChromeFilter = (value) => {
+  applyChromeFilter(value);
+  setFilterInputValue(value);
+};
+
+// Управление фильтром SEPIA
+const applySepiaFilter = (newValue) => {
+  previewImage.style.filter = `sepia(${newValue})`;
+};
+
+const setSepiaFilter = () => {
+  applySepiaFilter(FILTER_SEPIA_DEFAULT);
+  setFilterInputValue(FILTER_SEPIA_DEFAULT);
+
+  const sliderOptions = {
+    start: FILTER_SEPIA_DEFAULT,
+    range: {
+      min: FILTER_SEPIA_MIN,
+      max: FILTER_SEPIA_MAX
+    },
+    step: FILTER_SEPIA_STEP
+  };
+
+  slider.noUiSlider.updateOptions(sliderOptions);
+
+  showSlider();
+};
+
+const updateSepiaFilter = (value) => {
+  applySepiaFilter(value);
+  setFilterInputValue(value);
+};
+
+// Управление фильтром MARVIN
+const applyMarvinFilter = (newValue) => {
+  previewImage.style.filter = `invert(${newValue}%)`;
+};
+
+const setMarvinFilter = () => {
+  applyMarvinFilter(FILTER_MARVIN_DEFAULT);
+  setFilterInputValue(FILTER_MARVIN_DEFAULT);
+
+  const sliderOptions = {
+    start: FILTER_MARVIN_DEFAULT,
+    range: {
+      min: FILTER_MARVIN_MIN,
+      max: FILTER_MARVIN_MAX
+    },
+    step: FILTER_MARVIN_STEP
+  };
+
+  slider.noUiSlider.updateOptions(sliderOptions);
+
+  showSlider();
+};
+
+const updateMarvinFilter = (value) => {
+  applyMarvinFilter(value);
+  setFilterInputValue(value);
+};
+
+// Управление фильтром PHOBOS
+const applyPhobosFilter = (newValue) => {
+  previewImage.style.filter = `blur(${newValue}px)`;
+};
+
+const setPhobosFilter = () => {
+  applyPhobosFilter(FILTER_PHOBOS_DEFAULT);
+  setFilterInputValue(FILTER_PHOBOS_DEFAULT);
+
+  const sliderOptions = {
+    start: FILTER_PHOBOS_DEFAULT,
+    range: {
+      min: FILTER_PHOBOS_MIN,
+      max: FILTER_PHOBOS_MAX
+    },
+    step: FILTER_PHOBOS_STEP
+  };
+
+  slider.noUiSlider.updateOptions(sliderOptions);
+
+  showSlider();
+};
+
+const updatePhobosFilter = (value) => {
+  applyPhobosFilter(value);
+  setFilterInputValue(value);
+};
+
+// Управление фильтром HEAT
+const applyHeatFilter = (newValue) => {
+  previewImage.style.filter = `brightness(${newValue})`;
+};
+
+const setHeatFilter = () => {
+  applyHeatFilter(FILTER_HEAT_DEFAULT);
+  setFilterInputValue(FILTER_HEAT_DEFAULT);
+
+  const sliderOptions = {
+    start: FILTER_HEAT_DEFAULT,
+    range: {
+      min: FILTER_HEAT_MIN,
+      max: FILTER_HEAT_MAX
+    },
+    step: FILTER_HEAT_STEP
+  };
+
+  slider.noUiSlider.updateOptions(sliderOptions);
+
+  showSlider();
+};
+
+const updateHeatFilter = (value) => {
+  applyHeatFilter(value);
+  setFilterInputValue(value);
+};
+
+// Смена фильтра
+const onFilterInputClick = (evt) => {
+  const filter = evt.target.value;
+
+  if(filter === 'none') {
+    setOriginalFilter();
+  }
+
+  if(filter === 'chrome') {
+    setChromeFilter();
+  }
+
+  if(filter === 'sepia') {
+    setSepiaFilter();
+  }
+
+  if(filter === 'marvin') {
+    setMarvinFilter();
+  }
+
+  if(filter === 'phobos') {
+    setPhobosFilter();
+  }
+
+  if(filter === 'heat') {
+    setHeatFilter();
+  }
+};
+
+for (const filterInput of filterInputs) {
+  filterInput.addEventListener('click', onFilterInputClick);
+}
+
+const initFilterControls = () => {
+  setOriginalFilter();
+
+  noUiSlider.create(slider, {
+    range: {
+      min: 0,
+      max: 100,
+    },
+    start: 100,
+  });
+
+  slider.noUiSlider.on('slide', (value) => {
+    const filter = getActiveFilter();
+
+    if(filter === 'chrome') {
+      updateChromeFilter(value);
+    }
+
+    if(filter === 'sepia') {
+      updateSepiaFilter(value);
+    }
+
+    if(filter === 'marvin') {
+      updateMarvinFilter(value);
+    }
+
+    if(filter === 'phobos') {
+      updatePhobosFilter(value);
+    }
+
+    if(filter === 'heat') {
+      updateHeatFilter(value);
+    }
+  });
+};
+
+// Масштабирование изображения
+let currentScale = SCALE_DEFAULT;
+
+const onScaleUpButtonClick = () => {
+  if(currentScale > SCALE_MIN) {
+    currentScale = currentScale - SCALE_STEP;
+    previewImage.style.transform = `scale(${currentScale})`;
+    scaleValue.value = `${currentScale * 100 }%`;
+  }
+};
+
+const onScaleDownButtonClick = () => {
+  if(currentScale < SCALE_MAX) {
+    currentScale = currentScale + SCALE_STEP;
+    previewImage.style.transform = `scale(${currentScale})`;
+    scaleValue.value = `${currentScale * 100 }%`;
+  }
+};
 
 // Добавляем валидаторы для формы
 const pristine = new Pristine(
@@ -109,4 +413,9 @@ uploadForm.addEventListener('submit', (evt) => {
   }
 });
 
+scaleUpButton.addEventListener('click', onScaleUpButtonClick);
+scaleDownButton.addEventListener('click', onScaleDownButtonClick);
+
 uploadCloseButton.addEventListener('click', closeUploadModal);
+
+initFilterControls();
