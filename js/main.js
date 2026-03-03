@@ -1,6 +1,12 @@
-import '../vendor/pristine/pristine.min.js';
-import '../vendor/nouislider/nouislider.js';
 import './form.js';
+import { getData } from './api.js';
 import { renderPictures } from './pictures.js';
+import { showErrorAlert } from './utils.js';
 
-renderPictures();
+getData()
+  .then((pictures) => {
+    renderPictures(pictures);
+  })
+  .catch((err) => {
+    showErrorAlert(err.message);
+  });

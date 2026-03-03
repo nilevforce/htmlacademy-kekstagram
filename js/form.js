@@ -1,4 +1,5 @@
 import { isEscape } from './utils';
+import { sendData } from './api';
 
 const SCALE_DEFAULT = 1;
 const SCALE_MIN = 0.25;
@@ -34,6 +35,16 @@ const uploadForm = document.querySelector('.img-upload__form');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadCloseButton = uploadForm.querySelector('.img-upload__cancel');
+const uploadSubmitButton = uploadForm.querySelector('.img-upload__submit');
+
+const successUploadMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+
+const errorUploadMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
@@ -265,6 +276,7 @@ const initFilterControls = () => {
       max: 100,
     },
     start: 100,
+    connect: 'lower'
   });
 
   slider.noUiSlider.on('slide', (value) => {
@@ -363,6 +375,16 @@ pristine.addValidator(
   'Длина комментария не может составлять больше 140 символов;'
 );
 
+// Управление состоянием Sumbit кнопки
+const lockSubmitButton = () => {
+  uploadSubmitButton.disabled = true;
+};
+
+const unlockSubmitButton = () => {
+  uploadSubmitButton.disabled = false;
+};
+
+// Управление модальным окном
 const openUploadModal = () => {
   uploadOverlay.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -397,6 +419,52 @@ const onKeydownEvent = (evt) => {
   }
 };
 
+// Уведомления о результате загрузки изображения
+const showUploadSuccessMessage = () => {
+  const modal = successUploadMessageTemplate.cloneNode(true);
+  const closeButton = modal.querySelector('.success__button');
+
+  const closeModal = () => {
+    modal.remove();
+    document.removeEventListener('keydown', onEscKeydown);
+  };
+
+  const onEscKeydown = (evt) => {
+    if (isEscape(evt)) {
+      evt.preventDefault();
+      closeModal();
+    }
+  };
+
+  closeButton.addEventListener('click', closeModal, { once: true });
+  document.addEventListener('keydown', onEscKeydown);
+
+  document.body.appendChild(modal);
+};
+
+const showUploadErrorMessage = () => {
+  const modal = errorUploadMessageTemplate.cloneNode(true);
+  const closeButton = modal.querySelector('.error__button');
+
+  const closeModal = () => {
+    modal.remove();
+    document.removeEventListener('keydown', onEscKeydown);
+  };
+
+  const onEscKeydown = (evt) => {
+    if (isEscape(evt)) {
+      evt.preventDefault();
+      closeModal();
+    }
+  };
+
+  closeButton.addEventListener('click', closeModal, { once: true });
+  document.addEventListener('keydown', onEscKeydown);
+
+  document.body.appendChild(modal);
+};
+
+// Остальные обработчики
 uploadInput.addEventListener('change', () => {
   if (uploadInput.files.length) {
     openUploadModal();
@@ -409,7 +477,21 @@ uploadForm.addEventListener('submit', (evt) => {
   const isValidForm = pristine.validate();
 
   if(isValidForm) {
-    return evt.target.submit();
+    lockSubmitButton();
+
+    const form = evt.target;
+    const formData = new FormData(form);
+
+    sendData(formData)
+      .then(() => {
+        showUploadSuccessMessage();
+        form.reset();
+        closeUploadModal();
+      })
+      .catch(() => showUploadErrorMessage())
+      .finally(() => {
+        unlockSubmitButton();
+      });
   }
 });
 

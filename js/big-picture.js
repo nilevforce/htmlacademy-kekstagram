@@ -1,4 +1,3 @@
-import { getPicture } from './data.js';
 import { isEscape } from './utils.js';
 
 const COMMENTS_STEP_COUNT = 5;
@@ -107,8 +106,7 @@ const renderBigPicture = ({ url, description, likes }) => {
 };
 
 // Открываем модальное окна с просмотром изображения
-const openBigPicture = (pictureId) => {
-  const { url, description, likes, comments } = getPicture(pictureId);
+const openBigPicture = ({ url, description, likes, comments }) => {
 
   renderBigPicture({url, description, likes});
 

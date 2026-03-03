@@ -1,5 +1,8 @@
 const RANDOM_MIN_DEFAULT = 0;
 const RANDOM_MAX_DEFAULT = 1000;
+const ALERT_SHOW_TIME = 5000;
+
+const errorTemplateElement = document.querySelector('#data-error').content.querySelector('.data-error');
 
 const getRandomInt = (
   min = RANDOM_MIN_DEFAULT,
@@ -19,9 +22,23 @@ const createIdGenerator = () => {
 
 const isEscape = (evt) => evt.key === 'Escape';
 
+const showErrorAlert = (message) => {
+  const errorElement = errorTemplateElement.cloneNode(true);
+  const errorTitleElement = errorElement.querySelector('.data-error__title');
+  const currentTitle = errorTitleElement.textContent;
+  errorTitleElement.textContent = message || currentTitle || 'Упс.. Ошибочка вышла :(';
+
+  document.body.appendChild(errorElement);
+
+  setTimeout(() => {
+    errorElement.remove();
+  }, ALERT_SHOW_TIME);
+};
+
 export {
   getRandomArrayElement,
   createIdGenerator,
   getRandomInt,
-  isEscape
+  isEscape,
+  showErrorAlert
 };

@@ -1,5 +1,6 @@
-import { getPictures } from './data.js';
 import { openBigPicture } from './big-picture.js';
+
+let picturesList = [];
 
 // Находим в DOM контейнер .pictures, куда будут добавляться элементы
 // Находим template с id #picture и получаем из него шаблон элемента .picture
@@ -29,7 +30,8 @@ const createPictureElement = ({id, url, description, likes, comments }) => {
 // Создаем функцию onPictureClick – она отвечает за обработку клика по карточке
 const onPictureClick = (picture) => {
   const id = picture.dataset.jsId;
-  openBigPicture(id);
+  const { url, description, comments, likes } = picturesList.find((item) => item.id === Number(id));
+  openBigPicture({ id, url, description, comments, likes });
 };
 
 // Создаем обработчик клика по контейнеру .pictures
@@ -43,8 +45,9 @@ picturesContainer.addEventListener('click', (evt) => {
 });
 
 // Создаем функцию renderPictures — она отвечает за отрисовку всех карточек
-const renderPictures = () => {
-  const pictures = getPictures();
+const renderPictures = (pictures) => {
+  picturesList = pictures;
+
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((item) => {
