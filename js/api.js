@@ -1,43 +1,59 @@
-const BASE_URL = 'https://32.javascript.htmlacademy.pro/kekstagram';
+/**
+ * Необходимо написать две функции: GET и POST.
+ * getPictures - запрос изображений с сервера
+ * uploadPicture – отправка загруженного изображения на сервер
+ */
 
-const Routes = {
-  GET_DATA: '/data',
-  SEND_DATA: '/'
-};
+const BASE_URL = 'https://32.javascript.htmlacademy.pro/kekstagram';
 
 const Methods = {
   GET: 'GET',
   POST: 'POST'
 };
 
-const errorTexts = {
-  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
+const Routes = {
+  GET_PICTURE: '/data',
+  UPLOAD_PICTURE: '/'
 };
 
-const load = (
-  route,
-  errorText,
-  method = Methods.GET,
-  body = null
-) => fetch(`${BASE_URL}${route}`, {
-  method,
-  body
-})
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error();
-    }
-    return response.json();
-  })
-  .catch(() => {
-    throw new Error(errorText);
-  });
+const ErrorMessages = {
+  GET_PICTURE: 'Не удалось загрузить данные. Попробуйте обновить страницу',
+  UPLOAD_PICTURE: 'Не удалось отправить форму. Попробуйте ещё раз'
+};
 
-const getData = () => load(Routes.GET_DATA, errorTexts.GET_DATA);
-const sendData = (body) => load(`${Routes.SEND_DATA}/1`, errorTexts.SEND_DATA, Methods.POST, body);
+const request = (
+  route,
+  errorMessage,
+  body = null,
+  method = Methods.GET,
+) => {
+  return fetch(
+    `${BASE_URL}${route}`, {
+      method,
+      body
+    })
+    .then((response) => {
+      if(!response.ok) {
+        throw new Error(errorMessage);
+      }
+
+      return response.json();
+    })
+    .then((data) => data)
+    .catch((err) => {
+      throw err;
+    });
+};
+
+const fetchPictures = () => {
+  return request(Routes.GET_PICTURE, ErrorMessages.GET_PICTURE);
+};
+
+const uploadPicture = (payload) => {
+  return request(Routes.UPLOAD_PICTURE, ErrorMessages.UPLOAD_PICTURE, payload);
+};
 
 export {
-  getData,
-  sendData
+  fetchPictures,
+  uploadPicture
 };
