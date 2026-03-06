@@ -24,8 +24,8 @@ const ErrorMessages = {
 const request = (
   route,
   errorMessage,
-  body = null,
   method = Methods.GET,
+  body = null,
 ) => {
   return fetch(
     `${BASE_URL}${route}`, {
@@ -50,7 +50,7 @@ const fetchPictures = () => {
 };
 
 const uploadPicture = (payload) => {
-  return request(Routes.UPLOAD_PICTURE, ErrorMessages.UPLOAD_PICTURE, payload);
+  return request(Routes.UPLOAD_PICTURE, ErrorMessages.UPLOAD_PICTURE, Methods.POST, payload);
 };
 
 export {
