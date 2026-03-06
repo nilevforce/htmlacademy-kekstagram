@@ -2,11 +2,27 @@ import { isEscape } from './helpers.js';
 
 const modalStack = [];
 
-const openModal = ({ modal, open, close }) => {
+const lockBody = () => {
+  document.body.classList.add('modal-open');
+};
+
+const unlockBody = () => {
+  if(modalStack.length > 0) {
+    return;
+  }
+
+  document.body.classList.remove('modal-open');
+};
+
+const openModal = ({
+  modal,
+  open = () => modal.classList.remove('hidden'),
+  close = () => modal.classList.add('hidden')
+}) => {
   modalStack.push({ modal, open, close });
   open();
 
-  document.body.classList.add('modal-open');
+  lockBody();
 };
 
 const closeModal = (modal) => {
@@ -19,7 +35,7 @@ const closeModal = (modal) => {
   const [removed] = modalStack.splice(index, 1);
   removed.close();
 
-  document.body.classList.remove('modal-open');
+  unlockBody();
 };
 
 const closeTopModal = () => {
@@ -30,7 +46,7 @@ const closeTopModal = () => {
   const modal = modalStack.pop();
   modal.close();
 
-  document.body.classList.remove('modal-open');
+  unlockBody();
 };
 
 const onKeydownEvent = (evt) => {
