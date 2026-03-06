@@ -22,11 +22,7 @@ const openPictureViewer = (pictureId) => {
   renderPictureImage(picture);
   initComments(picture.comments);
 
-  openModal({
-    modal: rootElement,
-    open: () => rootElement.classList.remove('hidden'),
-    close: () => rootElement.classList.add('hidden')
-  });
+  openModal({ modal: rootElement });
 };
 
 // Закрывает окно просмотра изображения
