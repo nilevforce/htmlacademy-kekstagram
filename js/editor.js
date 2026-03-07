@@ -15,16 +15,23 @@ const resetEditor = () => {
   uploadFormElement.reset();
 };
 
-// Открывает редактор
-const openEditor = () => {
-  openModal({ modal: overlayElement });
-  initEffects();
-};
-
 // Закрывает редактор
 const closeEditor = () => {
   closeModal(overlayElement);
-  resetEditor();
+};
+
+// Открывает редактор
+const openEditor = () => {
+  openModal({
+    modal: overlayElement,
+    open: () => overlayElement.classList.remove('hidden'),
+    close: () => {
+      overlayElement.classList.add('hidden');
+      resetEditor();
+    }
+  });
+
+  initEffects();
 };
 
 // Переключает кнопку публикации

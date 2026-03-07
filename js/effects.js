@@ -177,7 +177,9 @@ const initEffects = () => {
 const resetEffects = () => {
   currentScale = SCALE_SETTINGS.DEFAULT;
   currentEffect = 'none';
+  setEffect(currentEffect);
   sliderElement.noUiSlider.destroy();
+  console.log('Сброс стилей');
 };
 
 export {
