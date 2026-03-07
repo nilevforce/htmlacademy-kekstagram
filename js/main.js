@@ -4,16 +4,16 @@ import { initStore } from './store.js';
 import { initFeed } from './feed.js';
 import { initUploader } from './uploader.js';
 
-const bootstrap = () => {
-  fetchPictures()
-    .then((pictures) => {
-      initStore({ pictures });
-    })
-    .then(() => {
-      initFeed();
-      initUploader();
-    })
-    .catch((err) => showAlertError(err.message));
+const bootstrap = async () => {
+  try {
+    const pictures = await fetchPictures();
+
+    initStore({ pictures });
+    initFeed();
+    initUploader();
+  } catch (error) {
+    showAlertError(error.message);
+  }
 };
 
 bootstrap();
