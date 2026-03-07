@@ -38,6 +38,15 @@ picturesContainer.addEventListener('click', (evt) => {
   }
 });
 
+// Удаляет изображени со страницы
+const removePictures = () => {
+  const picturesElement = picturesContainer.querySelectorAll('.picture');
+
+  for (const picture of picturesElement) {
+    picture.remove();
+  }
+};
+
 // Добавляет изображения на страницу с лентой
 const renderPictures = (pictures) => {
   const fragment = document.createDocumentFragment();
@@ -47,6 +56,8 @@ const renderPictures = (pictures) => {
       createPictureElement(element)
     );
   });
+
+  removePictures();
 
   picturesContainer.appendChild(fragment);
 };
@@ -58,5 +69,6 @@ const initFeed = () => {
 };
 
 export {
-  initFeed
+  initFeed,
+  renderPictures
 };
