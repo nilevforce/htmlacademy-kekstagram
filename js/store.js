@@ -8,7 +8,7 @@ const initStore = ({ pictures }) => {
   }
 };
 
-const getPictures = () => state.pictures;
+const getPictures = () => state.pictures.slice();
 
 const getPictureById = (id) => {
   return state.pictures.find((item) => String(item.id) === String(id));
