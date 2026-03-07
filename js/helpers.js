@@ -23,7 +23,6 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-
 export {
   isEscape,
   getRandomItems,

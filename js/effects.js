@@ -179,7 +179,6 @@ const resetEffects = () => {
   currentEffect = 'none';
   setEffect(currentEffect);
   sliderElement.noUiSlider.destroy();
-  console.log('Сброс стилей');
 };
 
 export {
