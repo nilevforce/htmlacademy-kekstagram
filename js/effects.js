@@ -81,6 +81,12 @@ const decreaseScale = () => {
   scaleValueInputElement.value = `${currentScale * 100}%`;
 };
 
+const resetScale = () => {
+  currentScale = SCALE_SETTINGS.DEFAULT;
+  pictureElement.style.transform = `scale(${currentScale})`;
+  scaleValueInputElement.value = `${currentScale * 100}%`;
+};
+
 const onScaleChange = (evt) => {
   if (evt.target === scaleUpButtonElement) {
     increaseScale();
@@ -177,7 +183,10 @@ const initEffects = () => {
 const resetEffects = () => {
   currentScale = SCALE_SETTINGS.DEFAULT;
   currentEffect = 'none';
+
   setEffect(currentEffect);
+  resetScale();
+
   sliderElement.noUiSlider.destroy();
 };
 
