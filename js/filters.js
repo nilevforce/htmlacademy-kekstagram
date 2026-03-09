@@ -4,7 +4,13 @@ import { renderPictures } from './feed.js';
 import { debounce } from './helpers.js';
 
 const RANDOM_COUNT_PICTURES = 10;
-const RENDER_PICTURE_DELAY = 500;
+const RENDER_PICTURE_DELAY = 300;
+
+const FilterTypes = {
+  DEFAULT: 'filter-default',
+  DISCUSSED: 'filter-discussed',
+  RANDOM: 'filter-random',
+};
 
 const rootElement = document.querySelector('.img-filters');
 const buttonsElement = rootElement.querySelectorAll('.img-filters__button');
@@ -27,12 +33,15 @@ const debouncedRender = debounce(
 const changeFilter = (type) => {
   let pictures = getPictures();
 
-  if(type === 'filter-random') {
+  if(type === FilterTypes.RANDOM) {
     pictures = getRandomItems(pictures, RANDOM_COUNT_PICTURES);
   }
 
-  if(type === 'filter-discussed') {
-    pictures = pictures.slice().sort((a, b) => b.comments.length - a.comments.length);
+  if(type === FilterTypes.DISCUSSED) {
+    pictures = pictures.slice()
+      .sort(
+        (pictureA, pictureB) => pictureB.comments.length - pictureA.comments.length
+      );
   }
 
   debouncedRender(pictures);
