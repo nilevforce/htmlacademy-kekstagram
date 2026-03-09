@@ -1,3 +1,5 @@
+const DEBOUNCE_DELAY = 500;
+
 const isEscape = (evt) => evt.key === 'Escape';
 
 const getRandomItems = (arr, count = 1) => {
@@ -15,7 +17,7 @@ const getRandomItems = (arr, count = 1) => {
   return copy.slice(-count);
 };
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
