@@ -15,6 +15,7 @@ const onImageUploadInputChange = (evt) => {
   const fileName = file.name.toLowerCase();
 
   if(!isAllowedFileType(fileName)) {
+    imageUploadInputElement.value = '';
     showAlertError('Неподдерживаемый формат изображения.');
     return;
   }
