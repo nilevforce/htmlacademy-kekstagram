@@ -21,9 +21,7 @@ const onImageUploadInputChange = (evt) => {
   }
 
   imageElement.src = URL.createObjectURL(file);
-
-  // Добавляет задержку для устрания скачка загрузки изображения
-  setTimeout(() => openEditor(), 200);
+  imageElement.addEventListener('load', openEditor, {once: true});
 };
 
 const initUploader = () => {
