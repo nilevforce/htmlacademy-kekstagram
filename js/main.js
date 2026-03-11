@@ -7,10 +7,11 @@ import { initFeed } from './feed.js';
 
 const bootstrap = async () => {
   try {
+    initUploader();
+
     const pictures = await fetchPictures();
 
     initStore({ pictures });
-    initUploader();
     initFeed();
     initFilters();
   } catch (error) {

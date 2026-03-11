@@ -22,6 +22,8 @@ const closeEditor = () => {
 
 // Открывает редактор
 const openEditor = () => {
+  initEffects();
+
   openModal({
     modal: overlayElement,
     open: () => overlayElement.classList.remove('hidden'),
@@ -30,8 +32,6 @@ const openEditor = () => {
       resetEditor();
     }
   });
-
-  initEffects();
 };
 
 // Переключает кнопку публикации
